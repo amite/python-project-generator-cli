@@ -124,21 +124,133 @@ project_name/
 
 ### Running Tests
 
+The project includes a comprehensive test suite with 67+ tests covering unit tests, integration tests, and CLI interaction tests.
+
+#### Run All Tests
+
 ```bash
 uv run pytest
 ```
 
-### Running with Coverage
+#### Run Tests with Verbose Output
 
 ```bash
+uv run pytest -v
+```
+
+#### Run Specific Test Files
+
+```bash
+# Run CLI tests only
+uv run pytest tests/test_cli.py
+
+# Run template tests only
+uv run pytest tests/test_templates.py
+
+# Run integration tests only
+uv run pytest tests/integration/
+
+# Run UI tests only
+uv run pytest tests/test_ui.py
+```
+
+#### Run Specific Test Classes or Functions
+
+```bash
+# Run a specific test class
+uv run pytest tests/test_cli.py::TestValidateProjectName
+
+# Run a specific test function
+uv run pytest tests/test_cli.py::TestValidateProjectName::test_valid_project_names
+```
+
+#### Run Tests with Different Output Formats
+
+```bash
+# Show test coverage
+uv run pytest --cov=src --cov-report=term-missing
+
+# Generate HTML coverage report
 uv run pytest --cov=src --cov-report=html
+# Then open htmlcov/index.html in your browser
+
+# Show short traceback format
+uv run pytest --tb=short
+
+# Show no output except failures
+uv run pytest -q
+```
+
+#### Run Tests Matching a Pattern
+
+```bash
+# Run tests matching a keyword
+uv run pytest -k "template"
+
+# Run tests matching multiple keywords
+uv run pytest -k "template and not integration"
+```
+
+#### Run Tests in Parallel (faster)
+
+```bash
+# Install pytest-xdist first: uv add --dev pytest-xdist
+uv run pytest -n auto
+```
+
+#### Test Structure
+
+The test suite is organized as follows:
+
+```
+tests/
+├── __init__.py
+├── conftest.py              # Pytest fixtures and utilities
+├── test_cli.py              # CLI function tests
+├── test_templates.py         # Template base class tests
+├── test_template_registry.py # Template registry tests
+├── test_ui.py                # UI display function tests
+└── integration/
+    ├── __init__.py
+    └── test_template_generation.py  # Full project generation tests
+```
+
+#### Test Coverage
+
+The test suite covers:
+- **CLI Functions**: Validation, user input, path handling, overwrite confirmation
+- **Template Base Class**: Folder creation, file generation, error handling
+- **Template Registry**: Template discovery and retrieval
+- **UI Functions**: Display functions and console output
+- **Integration Tests**: Full project generation for all template types
+
+### Running with Coverage
+
+Generate a coverage report to see which parts of the code are tested:
+
+```bash
+# Terminal report with missing lines
+uv run pytest --cov=src --cov-report=term-missing
+
+# HTML report (opens in browser)
+uv run pytest --cov=src --cov-report=html
+open htmlcov/index.html  # or on Linux: xdg-open htmlcov/index.html
+
+# XML report (for CI/CD)
+uv run pytest --cov=src --cov-report=xml
 ```
 
 ### Code Formatting
 
 ```bash
+# Format code with black
 uv run black src tests
+
+# Check code style with ruff
 uv run ruff check src tests
+
+# Auto-fix ruff issues
+uv run ruff check --fix src tests
 ```
 
 ## Extending with New Templates

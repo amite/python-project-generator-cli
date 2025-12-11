@@ -1,4 +1,5 @@
 """CLI interface and user interaction logic"""
+import sys
 from pathlib import Path
 from rich.console import Console
 from rich.prompt import Prompt, Confirm
@@ -51,46 +52,51 @@ def confirm_overwrite(project_path: Path) -> bool:
 
 def run_cli():
     """Main CLI function"""
-    # Display welcome screen
-    display_welcome()
-    console.print()
-    display_project_types()
-    console.print()
-    
-    # Get project type
-    project_type = get_project_type()
-    
-    # Get project name
-    project_name = get_project_name()
-    
-    # Validate project name
-    if not validate_project_name(project_name):
-        display_error("Error: Project name should contain only letters, numbers, hyphens, and underscores")
-        return
-    
-    # Get project path
-    project_path = get_project_path(project_name)
-    
-    # Check if directory exists
-    if project_path.exists():
-        if not confirm_overwrite(project_path):
-            console.print("[yellow]Operation cancelled[/yellow]")
-            return
-    
-    # Create project directory
-    project_path.mkdir(parents=True, exist_ok=True)
-    
-    # Generate project based on type
     try:
-        template_class = get_template_class(project_type)
-        template = template_class(project_name, project_path)
-        template.generate()
+        # Display welcome screen
+        display_welcome()
+        console.print()
+        display_project_types()
+        console.print()
         
-        # Display success message
-        display_success(project_name, project_path)
+        # Get project type
+        project_type = get_project_type()
         
-    except Exception as e:
-        display_error(f"Error creating project: {e}")
-        import traceback
-        console.print(traceback.format_exc())
+        # Get project name
+        project_name = get_project_name()
+        
+        # Validate project name
+        if not validate_project_name(project_name):
+            display_error("Error: Project name should contain only letters, numbers, hyphens, and underscores")
+            return
+        
+        # Get project path
+        project_path = get_project_path(project_name)
+        
+        # Check if directory exists
+        if project_path.exists():
+            if not confirm_overwrite(project_path):
+                console.print("[yellow]Operation cancelled[/yellow]")
+                return
+        
+        # Create project directory
+        project_path.mkdir(parents=True, exist_ok=True)
+        
+        # Generate project based on type
+        try:
+            template_class = get_template_class(project_type)
+            template = template_class(project_name, project_path)
+            template.generate()
+            
+            # Display success message
+            display_success(project_name, project_path)
+            
+        except Exception as e:
+            display_error(f"Error creating project: {e}")
+            import traceback
+            console.print(traceback.format_exc())
+    except KeyboardInterrupt:
+        # Handle Ctrl-C gracefully
+        console.print("\n[yellow]Operation cancelled by user[/yellow]")
+        sys.exit(0)
 

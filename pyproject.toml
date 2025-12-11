@@ -16,16 +16,13 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = [
-    "ipykernel>=7.1.0",
-    "rich>=13.7.0",
-]
+dependencies = ["ipykernel>=7.1.0", "rich>=13.7.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=7.4.0", "pytest-cov>=4.1.0", "black>=23.7.0", "ruff>=0.1.0"]
 
 [project.scripts]
-pygenerate = "src.main:main"
+gen = "src.main:main"
 
 [build-system]
 requires = ["hatchling"]

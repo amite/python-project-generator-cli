@@ -6,6 +6,7 @@ from src.templates import (
     FastAPITemplate,
     DataScienceTemplate,
     AutomationTemplate,
+    SimpleBoilerplateTemplate,
 )
 from tests.conftest import verify_file_exists, verify_folder_structure, parse_pyproject_toml
 
@@ -236,6 +237,60 @@ class TestAutomationTemplate:
             assert "automation" in content.lower() or "scripting" in content.lower()
 
 
+class TestSimpleBoilerplateTemplate:
+    """Integration tests for Simple Py Boilerplate template"""
+    
+    def test_simple_boilerplate_generation(self, temp_project_dir):
+        """Test full Simple Py Boilerplate project generation"""
+        template = SimpleBoilerplateTemplate("test_simple", temp_project_dir)
+        template.generate()
+        
+        # Verify common folders
+        verify_folder_structure(temp_project_dir, template.common_folders)
+        
+        # Verify key files
+        verify_file_exists(temp_project_dir / "pyproject.toml")
+        verify_file_exists(temp_project_dir / "README.md")
+        verify_file_exists(temp_project_dir / ".gitignore")
+        verify_file_exists(temp_project_dir / "tests" / "test_basic.py")
+        verify_file_exists(temp_project_dir / "src" / "main.py")
+        verify_file_exists(temp_project_dir / "src" / "__init__.py")
+    
+    def test_simple_boilerplate_pyproject_content(self, temp_project_dir):
+        """Test Simple Py Boilerplate pyproject.toml content"""
+        template = SimpleBoilerplateTemplate("test_simple", temp_project_dir)
+        template.generate()
+        
+        pyproject_path = temp_project_dir / "pyproject.toml"
+        try:
+            content = parse_pyproject_toml(pyproject_path)
+            if isinstance(content, dict) and "content" not in content:
+                assert content["project"]["name"] == "test_simple"
+                # Should have no runtime dependencies (empty dependencies list)
+                assert "dependencies" in content["project"]
+        except Exception:
+            # Fallback: check file content
+            with open(pyproject_path, "r") as f:
+                content = f.read()
+                assert 'name = "test_simple"' in content
+                # Should have pytest in dev dependencies
+                assert "pytest" in content.lower()
+                # Should have minimal or no runtime dependencies
+                # Check that dependencies section exists but may be empty
+                assert "dependencies" in content.lower()
+    
+    def test_simple_boilerplate_readme_content(self, temp_project_dir):
+        """Test Simple Py Boilerplate README content"""
+        template = SimpleBoilerplateTemplate("test_simple", temp_project_dir)
+        template.generate()
+        
+        readme_path = temp_project_dir / "README.md"
+        with open(readme_path, "r") as f:
+            content = f.read()
+            assert "# test_simple" in content
+            assert "simple" in content.lower() or "boilerplate" in content.lower()
+
+
 class TestAllTemplatesCommonStructure:
     """Tests for common structure across all templates"""
     
@@ -244,6 +299,7 @@ class TestAllTemplatesCommonStructure:
         (FastAPITemplate, "test_fastapi"),
         (DataScienceTemplate, "test_ds"),
         (AutomationTemplate, "test_automation"),
+        (SimpleBoilerplateTemplate, "test_simple"),
     ])
     def test_all_templates_create_common_files(self, temp_project_dir, template_class, project_name):
         """Test that all templates create common files"""
@@ -262,6 +318,7 @@ class TestAllTemplatesCommonStructure:
         (FastAPITemplate, "test_fastapi"),
         (DataScienceTemplate, "test_ds"),
         (AutomationTemplate, "test_automation"),
+        (SimpleBoilerplateTemplate, "test_simple"),
     ])
     def test_all_templates_create_common_folders(self, temp_project_dir, template_class, project_name):
         """Test that all templates create common folders"""

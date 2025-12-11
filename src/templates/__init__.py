@@ -5,6 +5,7 @@ from .rag_agent import RAGAgentTemplate
 from .fastapi import FastAPITemplate
 from .data_science import DataScienceTemplate
 from .automation import AutomationTemplate
+from .simple_boilerplate import SimpleBoilerplateTemplate
 
 
 # Template registry - automatically populated
@@ -13,6 +14,7 @@ TEMPLATE_REGISTRY: Dict[str, Type[ProjectTemplate]] = {
     "2": FastAPITemplate,
     "3": DataScienceTemplate,
     "4": AutomationTemplate,
+    "5": SimpleBoilerplateTemplate,
 }
 
 
@@ -37,6 +39,7 @@ __all__ = [
     "FastAPITemplate",
     "DataScienceTemplate",
     "AutomationTemplate",
+    "SimpleBoilerplateTemplate",
     "TEMPLATE_REGISTRY",
     "get_template_list",
     "get_template_class",

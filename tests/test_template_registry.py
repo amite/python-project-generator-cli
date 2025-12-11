@@ -8,6 +8,7 @@ from src.templates import (
     FastAPITemplate,
     DataScienceTemplate,
     AutomationTemplate,
+    SimpleBoilerplateTemplate,
 )
 
 
@@ -20,6 +21,7 @@ class TestTemplateRegistry:
         assert "2" in TEMPLATE_REGISTRY
         assert "3" in TEMPLATE_REGISTRY
         assert "4" in TEMPLATE_REGISTRY
+        assert "5" in TEMPLATE_REGISTRY
     
     def test_registry_template_classes(self):
         """Test that registry contains correct template classes"""
@@ -27,6 +29,7 @@ class TestTemplateRegistry:
         assert TEMPLATE_REGISTRY["2"] == FastAPITemplate
         assert TEMPLATE_REGISTRY["3"] == DataScienceTemplate
         assert TEMPLATE_REGISTRY["4"] == AutomationTemplate
+        assert TEMPLATE_REGISTRY["5"] == SimpleBoilerplateTemplate
 
 
 class TestGetTemplateList:
@@ -59,6 +62,7 @@ class TestGetTemplateList:
         assert "2" in keys
         assert "3" in keys
         assert "4" in keys
+        assert "5" in keys
     
     def test_get_template_list_metadata(self):
         """Test that template list contains correct metadata"""
@@ -84,6 +88,7 @@ class TestGetTemplateClass:
         assert get_template_class("2") == FastAPITemplate
         assert get_template_class("3") == DataScienceTemplate
         assert get_template_class("4") == AutomationTemplate
+        assert get_template_class("5") == SimpleBoilerplateTemplate
     
     def test_get_template_class_invalid_key(self):
         """Test getting template class with invalid key raises ValueError"""

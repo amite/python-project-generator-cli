@@ -14,6 +14,29 @@ A beautiful and functional command-line tool for scaffolding Python projects wit
 
 ## Installation
 
+### Option 1: Global Installation (Recommended)
+
+Install the CLI globally using `pipx` (recommended for CLI tools):
+
+```bash
+# Install pipx if you don't have it
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+
+# Install the generator globally
+pipx install -e .
+```
+
+After installation, you can run `gen` from anywhere:
+
+```bash
+gen
+```
+
+### Option 2: Local Development
+
+For local development or if you prefer not to install globally:
+
 1. Clone or download this repository
 2. Install dependencies using uv:
 
@@ -22,6 +45,16 @@ uv sync
 ```
 
 ## Usage
+
+### If Installed Globally
+
+Simply run:
+
+```bash
+gen
+```
+
+### If Using Locally
 
 Run the generator:
 
